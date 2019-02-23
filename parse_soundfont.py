@@ -1,24 +1,29 @@
 from sf2utils.sf2parse import Sf2File
-import sf2utils
 from pprint import pprint
-from pyaudio import PyAudio
-import pymusician as pm
 
-FILE_PATH = "../../Documents/niceKeys23.sf2"
+from sys import argv
 
-with open(FILE_PATH,'rb') as f:
-    sf2 = Sf2File(f)
+try:
+    file_path = argv[1]
+except:
+    raise ValueError('Missing command line argument for <path-to-sf2-file>')
 
-SAMPLE_OFFSET = sf2.raw.smpl_offset
+try:
+    with open(file_path,'rb') as f:
+        sf2 = Sf2File(f)
+except:
+    raise FileNotFoundError('Error in reading file. Make sure path is correct and is an sf2 file.')
 
-def read_sample_data(bytes,start=0,offset=SAMPLE_OFFSET,file=FILE_PATH):
-    with open(file,'rb') as f:
-        f.seek(offset + start)
-        return f.read(bytes)
+print("\n\033[1;32mInfo from file:\033[0m")
+pprint(sf2.info)
+print(f'\n\033[1;32mSample offset (bytes):\033[0m {sf2.raw.smpl_offset}')
+print("\n\033[1;32mPresets:\033[0m")
+print("\033[0;36mMore options: \033[0m\n-presets (list preset data)\n-samples (list sample data)")
+# pprint(sf2.presets)
 
-data = sf2.raw.pdta
-phdr = data['Phdr']
-shdr = data['Shdr']
-
-#grand pianos: 96-98
-grand_piano_data = phdr[96]
+if '-presets' in argv:
+    print("\n\033[1;32mPresets:\033[0m")
+    pprint(sf2.presets)
+if '-samples' in argv:
+    print("\n\033[1;32mSamples:\033[0m")
+    pprint(sf2.samples) 
