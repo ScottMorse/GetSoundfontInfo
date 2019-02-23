@@ -7,9 +7,6 @@ import pymusician as pm
 FILE_PATH = "../../Documents/niceKeys23.sf2"
 
 with open(FILE_PATH,'rb') as f:
-    binary = f.read(10)
-
-with open(FILE_PATH,'rb') as f:
     sf2 = Sf2File(f)
 
 SAMPLE_OFFSET = sf2.raw.smpl_offset
@@ -24,6 +21,4 @@ phdr = data['Phdr']
 shdr = data['Shdr']
 
 #grand pianos: 96-98
-grand_piano_data = phdr[98]
-
-print(read_sample_data(100))
+grand_piano_data = phdr[96]
